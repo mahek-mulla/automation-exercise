@@ -43,10 +43,14 @@ jobs:
       - name: Collect coverage information
         run: coverage run -m pytest
 
+      - name: Debug Coverage File
+        run: |
+          ls -l .coverage
+          
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-file
+          name: coveragefile
           path: .coverage
           retention-days: 1
 
@@ -69,7 +73,7 @@ jobs:
       - name: Download Coverage Artifact
         uses: actions/download-artifact@v3
         with:
-          name: coverage-file
+          name: coveragefile
           
 
       - name: Generate Coverage Report
