@@ -16,12 +16,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
-      - name: Run black
-        uses: psf/black@stable
-        with:
-          options: --check --verbose
+      - name: Install Black
+        run: pip install black
+  
+      - name: Run Black
+        run: black --check .
 
   test:
     name: Run Tests
@@ -33,11 +34,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install Dependencies
         run: |
-          pip install pytest coverage matplotlib numpy
+          pip install pytest coverage matplotlib numpy pytest-cov
 
       - name: Run Tests and Collect Coverage
         run: |
@@ -69,7 +70,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install Coverage
         run: pip install coverage
