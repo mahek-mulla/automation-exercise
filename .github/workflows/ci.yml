@@ -1,0 +1,89 @@
+name: SSE CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  style_check:
+    name: Style Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run black
+        uses: psf/black@stable
+        with:
+          options: --check --verbose
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install pytest coverage matplotlib numpy
+
+      - name: Run Tests and Collect Coverage
+        run: |
+          pytest --cov=. --cov-report=term-missing
+        env:
+          COVERAGE_FILE: ".coverage"
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-file
+          path: .coverage
+          retention-days: 1
+
+  coverage_report:
+    name: Generate Coverage Report
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Download Coverage Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-file
+          path: .
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Coverage
+        run: pip install coverage
+
+      - name: Generate Coverage Report
+        run: |
+          coverage report
+          coverage xml
+        env:
+          COVERAGE_FILE: ".coverage"
+
+      - name: Upload Coverage XML Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-xml
+          path: coverage.xml
+          retention-days: 14
