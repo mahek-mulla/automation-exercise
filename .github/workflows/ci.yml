@@ -39,12 +39,9 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install pytest coverage matplotlib numpy pytest-cov
-
-      - name: Run Tests and Collect Coverage
-        run: |
-          pytest --cov=. --cov-report=term-missing
-        env:
-          COVERAGE_FILE: ".coverage"
+      
+      - name: Collect coverage information
+        run: coverage run -m pytest
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
