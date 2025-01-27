@@ -46,13 +46,14 @@ jobs:
       - name: Debug Coverage File
         run: |
           ls -l .coverage
-          
+
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
         with:
           name: coveragefile
           path: .coverage
           retention-days: 1
+          include-hidden-files: true
 
   coverage_report:
     name: Generate Coverage Report
