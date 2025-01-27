@@ -70,8 +70,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: coverage-file
-          path: .
-          
+          path: .coverage
+
       - name: Generate Coverage Report
         run: |
           coverage report
